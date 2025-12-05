@@ -1,0 +1,33 @@
+﻿# Build output
+target/
+bin/
+build/
+out/
+
+# Logs
+logs/
+*.log
+
+# Java
+*.class
+*.jar
+*.war
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# IntelliJ
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config locali facoltativi
+src/main/resources/application-local.properties
