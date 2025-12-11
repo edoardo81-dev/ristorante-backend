@@ -1,0 +1,7 @@
+﻿target/
+.git/
+.github/
+.gitignore
+.idea/
+.vscode/
+.DS_Store
