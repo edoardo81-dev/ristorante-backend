@@ -1,121 +1,133 @@
-Ristorante – Backend (Spring Boot)
+# 🍽️ Ristorante – Backend (Spring Boot)
 
-API REST per la gestione del menù di un ristorante (piatti + ingredienti) usata dal frontend Angular.
-l'applicazione nata come esercizio didattico è stata evoluta in chiave più professionale con dto per non esporre le entità 
-verso l'esterno, mapper per convertire dto in entità e vicevera, cors centralizzato e gestione delle eccezioni separate
-con risposte JSON uniformi
+API REST per la gestione del menù di un ristorante (piatti + ingredienti) usata dal frontend Angular.  
+L'applicazione, nata come esercizio didattico, è stata evoluta in chiave professionale con:
 
-Stack:
+- DTO per non esporre le entità verso l’esterno  
+- Mapper per conversione DTO ⇄ Entity  
+- CORS centralizzato  
+- Gestione eccezioni con risposte JSON uniformi (`ApiError`)  
+- Seed dati automatico opzionale
 
-Java 21, Spring Boot 3.5
+---
 
-Spring Data JPA (Hibernate)
+## 🚀 Deploy online (Render)
 
-MySQL 8
+Backend LIVE:  
+👉 **https://ristorante-backend-8awh.onrender.com**
 
-Lombok
-
-Maven
-
-Requisiti:
-
-Java 21
-
-Maven 3.9+
-
-MySQL 8 con database ad es. ristorante creato a mano:
-
-CREATE DATABASE ristorante CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+Endpoint base:  
+https://ristorante-backend-8awh.onrender.com/api/piatti
 
 
-Opzionale: Postman/HTTP client per test
+## 🛠 Stack Tecnologico
 
-Configurazione (variabili d’ambiente):
+- Java 21  
+- Spring Boot 3.5  
+- Spring Data JPA (Hibernate)  
+- MySQL 8  
+- Lombok  
+- Maven  
 
-L’app non contiene credenziali hardcodate. In application.properties sono lette da env vars:
+---
+
+## 📦 Requisiti
+
+- **Java 21**
+- **Maven 3.9+**
+- **MySQL 8** con database creato a mano:
+
+```sql
+CREATE DATABASE ristorante
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_0900_ai_ci;
+Opzionale: Postman o un qualsiasi HTTP client.
+
+🔐 Configurazione (variabili d’ambiente)
+Il progetto non contiene credenziali hardcodate.
+application.properties utilizza env vars:
+
+properties
 
 spring.datasource.url=${DB_URL:jdbc:mysql://localhost:3306/ristorante?useSSL=false&serverTimezone=UTC}
 spring.datasource.username=${DB_USER:root}
-spring.datasource.password=${DB_PASS}
+spring.datasource.password=${DB_PASS} <--- qui devi inserire la password del tuo database
+
 app.cors.allowed-origins=${APP_CORS_ORIGINS:http://localhost:4200,http://localhost:5173}
-
-
-Imposta quindi:
-
+Variabili richieste
 DB_URL (es. jdbc:mysql://localhost:3306/ristorante?useSSL=false&serverTimezone=UTC)
 
-DB_USER (es. root)
+DB_USER
 
-DB_PASS (obbligatoria, è letta come ${DB_PASS} nel file)
+DB_PASS
 
 APP_CORS_ORIGINS (origini FE consentite, separate da virgola)
 
-Esempi di export:
-
-Windows PowerShell
-
+Esempi di export
+PowerShell (Windows)
+ps
+Copia codice
 $env:DB_URL="jdbc:mysql://localhost:3306/ristorante?useSSL=false&serverTimezone=UTC"
 $env:DB_USER="root"
-$env:DB_PASS="<la-tua-password-MySQL>"
+$env:DB_PASS=""
 $env:APP_CORS_ORIGINS="http://localhost:4200"
-
-
-macOS/Linux (bash/zsh)
+macOS / Linux
+bash
 
 export DB_URL="jdbc:mysql://localhost:3306/ristorante?useSSL=false&serverTimezone=UTC"
 export DB_USER="root"
-export DB_PASS="<la-tua-password-MySQL>"
+export DB_PASS=""
 export APP_CORS_ORIGINS="http://localhost:4200"
+▶️ Avvio in locale
+bash
 
-Avvio in locale:
 mvn spring-boot:run
+Oppure:
 
-
-Oppure build JAR:
+bash
 
 mvn -DskipTests package
 java -jar target/*.jar
+🌱 Seed dati
+Nella classe DataInitializer (package com.example.config):
 
-Seed dati:
+Popola il DB solo se vuoto
 
-È presente un DataInitializer (in com.example.config). Se attivo, popola il DB solo se vuoto con 17 piatti (Primi/Secondi/Dolci/Bevande) e relativi ingredienti. In caso non veda dati:
+Inserisce 17 piatti + relativi ingredienti
 
-verifica le env vars del DB,
+Se non vedi i dati:
 
-verifica che il profilo/condizioni del DataInitializer (se annotato con @Profile) siano attive,
+verifica env vars del DB
 
-controlla i log di avvio.
+verifica eventuali profili
 
-Endpoints principali:
+controlla i log di avvio
 
+📡 Endpoints Principali
 Base path: /api/piatti
 
-GET /api/piatti – lista completa (con ingredienti)
+Metodo	Endpoint	Descrizione
+GET	/api/piatti	Lista completa (con ingredienti)
+GET	/api/piatti/ordered	Lista ordinata per il form “conto”
+GET	/api/piatti/{id}	Dettaglio
+GET	/api/piatti/categoria/{categoria}	Filtro categoria (case-insensitive)
+POST	/api/piatti	Crea nuovo piatto
+DELETE	/api/piatti/{id}	Elimina
 
-GET /api/piatti/ordered – lista ordinata per il form “conto”
-(ordine categorie: Primi → Secondi → Dolci → Bevande, poi nome asc)
-
-GET /api/piatti/{id} – dettaglio per id
-
-GET /api/piatti/categoria/{categoria} – filtra per categoria (case-insensitive)
-
-POST /api/piatti – crea nuovo piatto
-Esempio body
+Esempio POST
+json
 
 {
   "nome": "Cacio e Pepe",
   "categoria": "Primi",
   "prezzo": 9.00,
   "immagine": "cacio_e_pepe.jpg",
-  "ingredienti": ["Spaghetti","Pecorino Romano","Pepe"]
+  "ingredienti": ["Spaghetti", "Pecorino Romano", "Pepe"]
 }
+❗ Validazione ed Errori (ApiError)
+Esempio risposta:
 
-
-DELETE /api/piatti/{id} – elimina per id
-
-Validazione e errori:
-
-Gli errori sono normalizzati in ApiError:
+json
 
 {
   "timestamp": "2025-12-03 09:30:56",
@@ -125,37 +137,39 @@ Gli errori sono normalizzati in ApiError:
   "path": "/api/piatti/60",
   "details": null
 }
+Regole:
+404 risorsa non trovata
+
+400 validazione fallita
+
+500 errore non gestito
+
+🌍 CORS
+Whitelist configurata in CorsConfig.
+
+Legge:
+
+nginx
+Copia codice
+APP_CORS_ORIGINS
+Per Angular locale:
 
 
-Regole principali:
+http://localhost:4200
+📝 Note
+spring.jpa.hibernate.ddl-auto=update consigliato solo in sviluppo.
 
-404 Not Found per risorse inesistenti
+Per produzione → validate o migrazioni con Flyway.
 
-400 Bad Request per validazione (@Valid) o parametri errati
+Java 21 richiesto.
 
-500 Internal Server Error per errori non gestiti
-
-CORS:
-
-La whitelist è configurata in CorsConfig, legge APP_CORS_ORIGINS.
-Esempio per Angular:
-
-APP_CORS_ORIGINS=http://localhost:4200
-
-Note:
-
-spring.jpa.hibernate.ddl-auto=update è comodo in sviluppo; per produzione valuta validate o migrazioni (Flyway).
-
-Java 21 è richiesto.
-
-Come aggiungere il file e fare push
-
-Apri PowerShell nella cartella del progetto (dove c’è il pom.xml) e incolla:
+📤 Aggiungere README e push
+ps
 
 @"
-# (incolla qui TUTTO il contenuto del README sopra)
+(incolla qui il contenuto)
 "@ | Out-File -Encoding UTF8 README.md
 
 git add README.md
-git commit -m "Add README with setup, env vars and endpoints"
+git commit -m "Add complete README"
 git push
