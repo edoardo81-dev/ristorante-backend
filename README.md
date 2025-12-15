@@ -76,6 +76,7 @@ export DB_URL="jdbc:mysql://localhost:3306/ristorante?useSSL=false&serverTimezon
 export DB_USER="root"
 export DB_PASS=""
 export APP_CORS_ORIGINS="http://localhost:4200"
+
 ▶️ Avvio in locale
 
 mvn spring-boot:run
@@ -144,11 +145,8 @@ Whitelist configurata in CorsConfig.
 
 Legge:
 
-nginx
-Copia codice
 APP_CORS_ORIGINS
 Per Angular locale:
-
 
 http://localhost:4200
 📝 Note
@@ -158,4 +156,12 @@ Per produzione → validate o migrazioni con Flyway.
 
 Java 21 richiesto.
 
+📌 Note finali
+Questo progetto fa parte di un percorso di formazione full-stack Java ed è pensato come:
 
+dimostrazione di best practice Spring Boot
+dimostrazione di utilizzo di Angular
+progetto portfolio-ready, consultabile online
+
+👨‍💻 Autore: Edoardo Mattei
+📅 Anno: 2025
