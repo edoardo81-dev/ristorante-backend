@@ -65,26 +65,21 @@ APP_CORS_ORIGINS (origini FE consentite, separate da virgola)
 
 Esempi di export
 PowerShell (Windows)
-ps
-Copia codice
+
 $env:DB_URL="jdbc:mysql://localhost:3306/ristorante?useSSL=false&serverTimezone=UTC"
 $env:DB_USER="root"
 $env:DB_PASS=""
 $env:APP_CORS_ORIGINS="http://localhost:4200"
 macOS / Linux
-bash
 
 export DB_URL="jdbc:mysql://localhost:3306/ristorante?useSSL=false&serverTimezone=UTC"
 export DB_USER="root"
 export DB_PASS=""
 export APP_CORS_ORIGINS="http://localhost:4200"
 ▶️ Avvio in locale
-bash
 
 mvn spring-boot:run
 Oppure:
-
-bash
 
 mvn -DskipTests package
 java -jar target/*.jar
@@ -163,13 +158,4 @@ Per produzione → validate o migrazioni con Flyway.
 
 Java 21 richiesto.
 
-📤 Aggiungere README e push
-ps
 
-@"
-(incolla qui il contenuto)
-"@ | Out-File -Encoding UTF8 README.md
-
-git add README.md
-git commit -m "Add complete README"
-git push
