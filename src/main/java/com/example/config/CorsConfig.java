@@ -6,25 +6,29 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
-  @Value("${app.cors.allowed-origins}")
-  private String allowed; // es: https://ristorante-frontend-d1gp.onrender.com,http://localhost:4200
+    @Value("${app.cors.allowed-origins:*}")
+    private String allowedOrigins;
 
-  @Override
-  public void addCorsMappings(CorsRegistry registry) {
-    String[] origins = Arrays.stream(allowed.split(","))
-        .map(String::trim)
-        .filter(s -> !s.isEmpty())
-        .toArray(String[]::new);
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
 
-    registry.addMapping("/api/**")
-        .allowedOrigins(origins)                    // niente "*"
-        .allowedMethods("GET","POST","PUT","DELETE","PATCH","OPTIONS")
-        .allowedHeaders("*")
-        .allowCredentials(true)
-        .maxAge(3600);
-  }
+        List<String> origins = Arrays.stream(allowedOrigins.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isBlank())
+                .collect(Collectors.toList());
+
+        // allowedOriginPatterns permette "*" anche con credentials
+        registry.addMapping("/**")
+                .allowedOriginPatterns(origins.toArray(new String[0]))
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
+    }
 }

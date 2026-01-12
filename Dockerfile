@@ -1,26 +1,20 @@
 ﻿# ---------- BUILD STAGE ----------
 FROM maven:3.9.9-eclipse-temurin-21 AS build
-WORKDIR /workspace
+WORKDIR /app
 
 COPY pom.xml .
-# Pre-carica le dipendenze per sfruttare la cache
 RUN mvn -q -e -DskipTests dependency:go-offline
 
 COPY src ./src
-RUN mvn -q -e -DskipTests package
+RUN mvn -q -DskipTests clean package
 
 # ---------- RUN STAGE ----------
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
-# Usiamo il profilo H2 "demo" su Render
-ENV SPRING_PROFILES_ACTIVE=demo
-ENV JAVA_OPTS=""
-# Aiuta a non sforare la RAM nei piani free
-ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75"
+COPY --from=build /app/target/*.jar app.jar
 
-# Copia il jar dallo stage di build
-COPY --from=build /workspace/target/*.jar /app/app.jar
+EXPOSE 8080
+ENV PORT=8080
 
-# Render espone la porta tramite $PORT
-CMD ["sh","-c","java $JAVA_OPTS -Dserver.port=$PORT -jar /app/app.jar"]
+ENTRYPOINT ["java","-Dserver.port=${PORT}","-jar","app.jar"]
