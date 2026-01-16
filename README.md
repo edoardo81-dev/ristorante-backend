@@ -19,6 +19,19 @@ Backend LIVE:
 Endpoint base:  
 https://ristorante-backend-8awh.onrender.com/api/piatti
 
+## ⚡ Cold start Render + Keep Alive (Ping)
+
+Nel free tier di Render il backend può andare in **sleep** dopo un periodo di inattività.
+Questo comporta che la **prima chiamata** alle API può essere lenta (cold start).
+
+✅ Per migliorare l’esperienza utente è stato introdotto:
+
+- endpoint leggero:  
+  **GET /ping** → restituisce `"ok"`
+- monitor esterno (UptimeRobot) che richiama periodicamente `/ping` per mantenere il servizio attivo
+
+Endpoint ping:
+👉 https://ristorante-backend-8awh.onrender.com/ping
 
 ## 🛠 Stack Tecnologico
 
