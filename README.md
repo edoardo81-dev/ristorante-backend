@@ -14,10 +14,10 @@ L'applicazione, nata come esercizio didattico, è stata evoluta in chiave profes
 ## 🚀 Deploy online (Render)
 
 Backend LIVE:  
-👉 **https://ristorante-backend-8awh.onrender.com**
+👉 **https://ristorante-backend-ka1l.onrender.com**
 
 Endpoint base:  
-https://ristorante-backend-8awh.onrender.com/api/piatti
+https://ristorante-backend-ka1l.onrender.com/api/piatti
 
 ## ⚡ Cold start Render + Keep Alive (Ping)
 
